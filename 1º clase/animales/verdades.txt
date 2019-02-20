@@ -1,0 +1,39 @@
+Esto son sólo los hecho, es decir, verdades. En prolog sería:
+
+aracnido(tarantula)
+aracnido(viuda_negra)
+aracnido(anacran)
+
+insecto(hormiga)
+insecto(mosca)
+insecto(avispa)
+
+serpiente(cobra)
+serpiente(vibora)
+serpiente(boa)
+
+Podemos preguntar a prolog si ?- aracnido(avispa) y reponde no o sí
+Podemos preguntar a combinaciones(AND) prolog si ?- aracnido(avispa), aracnido(viuda_negra) 
+y reponde no o sí
+
+
+La relación patas será:
+
+
+Un animal A tiene 8 patas si es aracnido:
+animal A tiene 8 patas -> aracnido
+En prolog
+patas(A, 8) :-
+    aracnido(A)
+
+patas(A, 6) :-
+    insecto(A)
+
+patas(A, 0) :-
+    serpiente(A)
+
+Podemos preguntar que animles tienen 8 patas de la siguiente forma: patas(X,8)
+Podemos preguntar que animal tiene 8 patas: patas(A, 8). Esto enumera las posibilidades
+Podemos preguntar si un animal tiene 0 patas: patas(boa, 0)
+En la relacion hay que poner variables libre
+Para obtener todos los animales:

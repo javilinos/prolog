@@ -1,0 +1,21 @@
+Manuel padece gripe y hepatitis
+Ignacio padede hepatitis
+Ana padece gripe
+José padece intoxicación
+La fiebre es un sintoma de gripe
+El cansancio es un sintoma de hepatitis y sintoma de gripe
+La diarrea es un sintoma de intoxicación
+La aspirina suprime la fiebre
+El lomotil suprime la diarrea
+*Un medicamento alivia una enfermedad si la enfermedad tiene un sintoma que sea suprimido
+por el medicamento
+*Una persona debería tomar un medicamento si padece una enfermedadque sea aliviada por el medicamento
+
+Pregunta
+1- Dolencias de manuel y Ana
+2- quien padece gripe
+3- sintomas de jose
+4- quien padece diarrea
+5- quien esta cansado  
+6- Hay algun medicamento que alivie a manuel
+7- Hay algun sintoma que compartan Ignacio y ana
