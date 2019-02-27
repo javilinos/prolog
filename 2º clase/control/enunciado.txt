@@ -1,0 +1,8 @@
+1. Si Corlone controla Manhattan y Brooklyn, eliminará a Solozzo
+2. Si Solozzo controla la droga y Roth le apoya, eliminará a Corlone
+3. Si Roth apoya a Solozzo, este controlará el Bronx y Harlem, pero si apoya a Corlone
+este controlará Manhattan y Brooklyn
+4. Roth apoyará a quien le garantice impunidad
+5. Corlone controla el juego y Solozzo la droga
+6. Es necesario controlar a la policía si se controla el juego
+7. Controlar la policía implica garantizar la impunidad de cualquiera.
