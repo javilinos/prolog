@@ -1,8 +1,10 @@
-% menor_o_igual_que(X,Y) --> X > Y
 menor_o_igual_que(s(0),X) :- X\=0.		% min(0,X) = X
 menor_o_igual_que(s(X),s(Y)) :-
 	menor_o_igual_que(X,Y).
-% Fin menor_o_igual_que
+
+mayor_o_igual_que(X,s(0)) :- X\=0.		% min(0,X) = X
+mayor_o_igual_que(s(X),s(Y)) :-
+	mayor_o_igual_que(X,Y).
 
 % Colores validos
 color(a).
@@ -24,7 +26,7 @@ esPieza(ANCHURA,ALTURA,PROFUNDIDAD,COLOR) :-
 
 puede_estar_encima_de(pieza(ANCHURA1,ALTURA1,PROFUNDIDAD1,COLOR1), pieza(ANCHURA2,ALTURA2,PROFUNDIDAD2,COLOR2)) :-
     esPieza(ANCHURA1,ALTURA1,PROFUNDIDAD1,COLOR1),
-    esPieza(ANCHURA1,ALTURA1,PROFUNDIDAD2,COLOR2),
+    esPieza(ANCHURA2,ALTURA2,PROFUNDIDAD2,COLOR2),
     menor_o_igual_que(ANCHURA1,ANCHURA2),
     menor_o_igual_que(PROFUNDIDAD1,PROFUNDIDAD2).
 
@@ -40,3 +42,18 @@ esTorre([PIEZA1 | X]) :-
     p(X,PIEZA2,_),
     puede_estar_encima_de(PIEZA1,PIEZA2),
     esTorre(X).
+
+esCero(0).
+
+
+alturaTorre(P,N) :-
+    nat(N),
+    alturaTorreRecursivo(P,N).
+
+alturaTorreRecursivo(P,s(N)) :-
+    p(P,_,PP),
+    alturaTorreRecursivo(PP,N).
+
+alturaTorreRecursivo([],N) :-
+    esCero(N).
+
