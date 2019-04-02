@@ -7,7 +7,7 @@ menorIgualQue(s(X),s(Y)) :-
 suma(0,X,X).  			
 suma(s(X),Y,Z) :-
 	suma(X,s(Y),Z).
-1
+
 
 %% MULTIPLICAR
 multiplicar(0,X,0) :- nat(X).
@@ -37,22 +37,22 @@ nat(s(X)) :- nat(X).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% ES TORRE %%%%%%%%%%%%%%%%%%%%%%%%%%
-esPieza(ANCHURA,ALTURA,PROFUNDIDAD,COLOR) :-
-    nat(ANCHURA),
-    nat(ALTURA),
-    nat(PROFUNDIDAD),
-    color(COLOR).
+esPieza(ANCH,ALT,PROF,C) :-
+    nat(ANCH),
+    nat(ALT),
+    nat(PROF),
+    color(C).
 
-puede_estar_encima_de(pieza(ANC1,ALT1,PRO1,C1), pieza(ANC2,ALT2,PRO2,C2)) :-
-    esPieza(ANC1,ALT1,PRO1,C1),
-    esPieza(ANC2,ALT2,PRO2,C2),
-    menorIgualQue(ANC1,ANC2),
-    menorIgualQue(PRO1,PRO2).
+puede_estar_encima_de(pieza(ANCH1,ALT1,PROF1,C1), pieza(ANCH2,ALT2,PROF2,C2)) :-
+    esPieza(ANCH1,ALT1,PROF1,C1),
+    esPieza(ANCH2,ALT2,PROF2,C2),
+    menorIgualQue(ANCH1,ANCH2),
+    menorIgualQue(PROF1,PROF2).
 
 esTorre([pieza(ANC,ALT,PRO,C) | []]) :- esPieza(ANC,ALT,PRO,C).
 esTorre([PIEZA1, PIEZA2 | X]) :-
     puede_estar_encima_de(PIEZA1,PIEZA2),
-    esTorre([PIEZA2,X]).
+    esTorre([PIEZA2|X]).
 %%%%%%%%%%%%%%%%%%%%%%%% FIN ES TORRE %%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -134,7 +134,6 @@ contarClavos([b|T],N) :-
     contarClavos(T,N).
 contarClavos([_|T],N) :-
     contarClavos(T,s(N)).
-
 %%%%%%%%%%%%%%%%%%%%%%%% FIN ES EDIFICIO PAR %%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -144,18 +143,22 @@ contarClavos([_|T],N) :-
 %esEdificioPiramide/1 (esEdificioPiramide(Construccion): predicado que
 %verifica si Construccion es un edificio que cumple que cada nivel tiene
 %ancho estrictamente mayor que el nivel de arriba.
-esEdificioPiramide([H|CONSTRUCCION]) :-
-    contarAncho(H,N),
+esEdificioPiramide([FILA|CONSTRUCCION]) :-
+    contarAncho(FILA,0,N),
     esEdificioPiramideRecursivo(CONSTRUCCION, N).
-esEdificioPiramideRecursivo([FILA|CONSTRUCCION], N_ANTERIOR) :- contarAncho(FILA,_,N_ANTERIOR).
-esEdificioPiramideRecursivo([FILA|CONSTRUCCION], N_ANTERIOR) :-
-    contarAncho(FILA,N_ACTUAL,N_ANTERIOR),
+
+esEdificioPiramideRecursivo(FILA, N1) :- 
+    contarAncho(FILA,0,N2),
+    menorIgualQue(N1,N2).
+
+esEdificioPiramideRecursivo([FILA|CONSTRUCCION], N1) :-
+    contarAncho(FILA,0,N2),
+    menorIgualQue(N1,N2),
     esEdificioPiramideRecursivo(CONSTRUCCION,N2).
 
-contarAncho([_|[]], N1, N2) :- menorIgualQue(N1,N2).
-%contarAncho([b|CONSTRUCCION],N1, N2):-      <-- si se tiene en cuenta b de vacio
-%    contarAncho(CONSTRUCCION,N1, N2).       <-- "     "        "            "
-contarAncho([_|CONSTRUCCION], N1, N2):-
-    contarAncho(CONSTRUCCION, s(N1), N2).
+contarAncho([], N1, N2) :- contarAncho([],_,N1), N2.
+contarAncho([b|CONSTRUCCION],N, _):-    
+    contarAncho(CONSTRUCCION,N, _).
+contarAncho([_|CONSTRUCCION], N, _):-
+    contarAncho(CONSTRUCCION, s(N), _).
 %%%%%%%%%%%%%%%%%%%%%% FIN ES EDIFICIO PIRAMIDE %%%%%%%%%%%%%%%%%%%%%
-
