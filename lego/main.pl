@@ -4,7 +4,7 @@ nat(s(X)) :- nat(X).
 
 
 %% MENOR O IGUAL
-p_menorIgualQue(0,X) :- s(X)\=0.
+p_menorIgualQue(0,_).
 p_menorIgualQue(s(X),s(Y)) :-
 	p_menorIgualQue(X,Y).
 menorIgualQue(X,Y) :-
@@ -49,11 +49,12 @@ color(v).
 
 
 % IGUAL QUE
+p_igualQue(0,0).
+p_igualQue(s(N1),s(N2)) :- p_igualQue(N1,N2).
 igualQue(N1,N2) :- 
     nat(N1),
     nat(N2),
-    N1=N2.
-
+    p_igualQue(N1,N2).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% ES TORRE %%%%%%%%%%%%%%%%%%%%%%%%%%
 esPieza(ANCH,ALT,PROF,C) :-
@@ -78,20 +79,15 @@ esTorre([PIEZA1, PIEZA2 | X]) :-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%% ALTURA TORRE %%%%%%%%%%%%%%%%%%%%%%%%
-esCero(X) :- X=0.
 alturaTorre(P,N) :-
     esTorre(P),
     nat(N),
-    alturaTorreRecursivo(P,N).
+    alturaTorreRecursivo(P,0,N).
 
-alturaTorreRecursivo([],0).
-alturaTorreRecursivo([],_) :- 0\=0.
-alturaTorreRecursivo(_,0) :- 0\=0.
-alturaTorreRecursivo([pieza(_,ALT,_,_)|P],N) :-
-    format('~n~n JAJA ~w ~w ~n KKK ~w ~n',[N, ALT, P]),
-    resta(N,ALT,NTOTAL),
-    format('LOL ~w ~w ~n',[NTOTAL, P]),
-    alturaTorreRecursivo(P,NTOTAL).
+alturaTorreRecursivo([],N1,N2) :- N1=N2.
+alturaTorreRecursivo([pieza(_,ALT,_,_)|P],N,NTOTAL) :-
+    suma(N,ALT,NTEMP),
+    alturaTorreRecursivo(P,NTEMP,NTOTAL).
 %%%%%%%%%%%%%%%%%%%%%% FIN ALTURA TORRE %%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -122,22 +118,12 @@ coloresTorreRecursivo([pieza(_,_,_,COLOR1)|COLORES_TORRE],[COLOR2|COLORES]) :-
 coloresIncluidos(TORRE1,TORRE2) :-
     esTorre(TORRE1),
     esTorre(TORRE2),
-    coloresIncluidosRecursivo(TORRE1,TORRE2).
-
-% Recorremos todos los elementos de TORRE1 y comprobamos por cada elemento si el color se encuentra en la lista llamada TORRE2
-coloresIncluidosRecursivo([pieza(_,_,_,COLOR)|[]],TORRE2) :- colorEstaEnLista(COLOR,TORRE2).
-coloresIncluidosRecursivo([pieza(_,_,_,COLOR)|TORRE1],TORRE2) :-
-    format('~nCOLOR IN- ~w~n',[COLOR]),
-    colorEstaEnLista(COLOR,TORRE2),
-    coloresIncluidosRecursivo(TORRE1,TORRE2).
-
-% Devuelve si COLOR1 se encuentra en la lista TORRE
-% TODO comprobar que cuando COLOR1 sea igual a COLOR2, se pare la recursion
-colorEstaEnLista(COLOR1,[COLOR2|[]]) :- COLOR1 \= COLOR2.
-colorEstaEnLista(COLOR1,[pieza(_,_,_,COLOR2)|TORRE]) :-
-    format('~nCOLORES- ~w -- ~w~n',[COLOR1,COLOR2]),
-    COLOR1 = COLOR2,
-    colorEstaEnLista(COLOR1,TORRE).
+    coloresIncluidosRecursivo(TORRE1,TORRE2,TORRE2).
+coloresIncluidosRecursivo([],_,_).
+coloresIncluidosRecursivo([pieza(_,_,_,COLOR)|TORRE1],[pieza(_,_,_,COLOR)|_],TORRE2):-
+	coloresIncluidosRecursivo(TORRE1,TORRE2,TORRE2).
+coloresIncluidosRecursivo(TORRE1,[_|TORRE2],T):-
+	coloresIncluidosRecursivo(TORRE1,TORRE2,T).
 %%%%%%%%%%%%%%%%%%%% FIN COLORES INCLUIDOS %%%%%%%%%%%%%%%%%%%
 
 
