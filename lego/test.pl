@@ -31,10 +31,16 @@ test(_) :-
     testResta(_),
     testPar(_),
     testColor(_),
+    testIgualQue(_),
+
+    % TORRE
     testEsTorre(_),
     testAlturaTorre(_),
     testColoresTorre(_),
     testColoresIncluidos(_),
+    
+    % EDIFICIO
+    %esEdificio(_),
     format('TODO OK! ~n').
 
 
@@ -153,6 +159,22 @@ testColor(_) :-
     assert(7,not(tColor([s(0),0,s(s(0))]))),
     format('   ------------------------------------------------~n',[]).
 
+tIgualQue(A,B) :- igualQue(A,B).
+testIgualQue(_) :-
+    format('~n   --------------- TEST IGUAL QUE ---------------~n',[]),
+    assert(1,tIgualQue(0,0)),
+    assert(2,tIgualQue(s(0),s(0))),
+    assert(3,tIgualQue(s(s(0)),s(s(0)))),
+    assert(4,tIgualQue(s(s(s(0))),s(s(s(0))))),
+    assert(5,not(tIgualQue(0,s(0)))),
+    assert(6,not(tIgualQue(s(0),0))),
+    assert(7,not(tIgualQue(s(0),s(s(0))))),
+    assert(8,not(tIgualQue(s(0),s(s(s(0)))))),
+    assert(9,not(tIgualQue(t,s(0)))),
+    assert(10,not(tIgualQue(s(0),t))),
+    assert(11,not(tIgualQue(t,t))),
+    format('   ------------------------------------------------~n',[]).
+
 tEsTorre(A) :- esTorre(A).
 testEsTorre(_):-
     format('~n   --------------- TEST ES TORRE ----------------~n',[]),
@@ -240,4 +262,17 @@ testColoresIncluidos(_):-
     assert(11,not(tColoresIncluidos([pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),r)],[pieza(s(0),s(0),s(0),v)]))),
     assert(12,not(tColoresIncluidos([pieza(s(0),s(0),s(0),a),pieza(s(0),s(0),s(0),v),pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),am)],[pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),v),pieza(s(0),s(0),s(0),a)]))),
     assert(13,not(tColoresIncluidos([pieza(s(0),s(0),s(0),a),pieza(s(0),s(0),s(0),v),pieza(s(0),s(0),s(0),r),pieza(s(0),s(0),s(0),am)],[pieza(s(0),s(0),s(0),r)]))),
+    format('   ------------------------------------------------~n',[]).
+
+tEsEdificio(A) :- esEdificio(A).
+testEsEdificio(_):-
+    format('~n   -------------- TEST ES EDIFICIO --------------~n',[]),
+    assert(1,tEsEdificio([])),
+    assert(1,tEsEdificio([[a]])),
+    assert(1,tEsEdificio([[a],[a]])),
+    assert(1,tEsEdificio([[a],[a],[a]])),
+    assert(1,tEsEdificio([[a,v]])),
+    assert(1,tEsEdificio([[am],[v]])),
+    assert(1,tEsEdificio([[am],[r],[r]])),
+    assert(1,tEsEdificio([[am,v],[r,r],[r,r]])),
     format('   ------------------------------------------------~n',[]).

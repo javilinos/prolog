@@ -14,9 +14,15 @@ menorIgualQue(X,Y) :-
 
 
 % Actualmente no se usa suma. Se tendria que borrar
-suma(0,X,X).
-suma(s(X),Y,Z) :-
-	suma(X,s(Y),Z).
+p_suma(0,X,X).
+p_suma(s(X),Y,Z) :-
+	p_suma(X,s(Y),Z).
+suma(X,Y,Z) :-
+    nat(X),
+    nat(Y),
+    nat(Z),
+    p_suma(X,Y,Z).
+
 
 % Se comprueba que X > Y. y se llama a p_resta (resta funcion privada)
 p_resta(X,0,X).
@@ -26,6 +32,7 @@ resta(X,Y,Z) :-
     nat(X),
     nat(Y),
     p_menorIgualQue(Y,X),
+    nat(Z),
     p_resta(X,Y,Z).
 
 %% PAR
@@ -41,6 +48,11 @@ color(r).
 color(v).
 
 
+% IGUAL QUE
+igualQue(N1,N2) :- 
+    nat(N1),
+    nat(N2),
+    N1=N2.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% ES TORRE %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,21 +78,19 @@ esTorre([PIEZA1, PIEZA2 | X]) :-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%% ALTURA TORRE %%%%%%%%%%%%%%%%%%%%%%%%
-esCero(0).
-
+esCero(X) :- X=0.
 alturaTorre(P,N) :-
-    nat(N),
     esTorre(P),
+    nat(N),
     alturaTorreRecursivo(P,N).
 
-sumaAlturas(pieza(_,ALT1,_,_),N,P):-
-    menorIgualQue(ALT1,N),
-    resta(N,ALT1,Z),
-    alturaTorreRecursivo(P,Z).
-
-alturaTorreRecursivo([],N) :- esCero(N).
+alturaTorreRecursivo([],0).
+alturaTorreRecursivo([],_) :- 0\=0.
+alturaTorreRecursivo(_,0) :- 0\=0.
 alturaTorreRecursivo([pieza(_,ALT,_,_)|P],N) :-
+    format('~n~n JAJA ~w ~w ~n KKK ~w ~n',[N, ALT, P]),
     resta(N,ALT,NTOTAL),
+    format('LOL ~w ~w ~n',[NTOTAL, P]),
     alturaTorreRecursivo(P,NTOTAL).
 %%%%%%%%%%%%%%%%%%%%%% FIN ALTURA TORRE %%%%%%%%%%%%%%%%%%%%%%
 
@@ -133,6 +143,43 @@ colorEstaEnLista(COLOR1,[pieza(_,_,_,COLOR2)|TORRE]) :-
 
 
 
+%%%%%%%%%%%%%%%%%%% CONTAR ANCHO SIN ESPACIOS %%%%%%%%%%%%%%%%%
+contarCeldasSinBlanco([], N1, N2) :- suma(N1,0,N2).
+contarCeldasSinBlanco([b|CONSTRUCCION],N, _):-    
+    contarCeldasSinBlanco(CONSTRUCCION,N, _).
+contarCeldasSinBlanco([_|CONSTRUCCION], N, _):-
+    contarCeldasSinBlanco(CONSTRUCCION, s(N), _).
+%%%%%%%%%%%%%%%%%% FIN CONTAR ANCHO SIN ESPACIOS %%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%% CONTAR ANCHO CON ESPACIOS %%%%%%%%%%%%%%%%%
+contarCeldasConBlanco([], N1, N2) :- suma(N1,0,N2).
+contarCeldasConBlanco([_|CONSTRUCCION], N, _):-
+    contarCeldasConBlanco(CONSTRUCCION, s(N), _).
+%%%%%%%%%%%%%%%%%% FIN CONTAR ANCHO CON ESPACIOS %%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% ES EDIFICIO %%%%%%%%%%%%%%%%%%%%%%%%%%
+esEdificioRecursividad([FILA | []],N1) :-
+    contarCeldasConBlanco(FILA,0,N2),
+    igualQue(N1,N2).
+esEdificioRecursividad([FILA | CONSTRUCCION],N1) :-
+    contarCeldasConBlanco(FILA,0,N2),
+    igualQue(N1,N2),
+    esEdificioRecursividad(CONSTRUCCION,N1).
+    
+esEdificio([FILA | CONSTRUCCION]) :-
+    contarCeldasConBlanco(FILA,0,N),
+    esEdificioRecursividad(CONSTRUCCION,N).
+%%%%%%%%%%%%%%%%%%%%%%%% FIN ES EDIFICIO %%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%% ES EDIFICIO PAR %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Llamada principal
 esEdificioPar(CONSTRUCCION) :-
@@ -161,21 +208,15 @@ contarClavos([_|T],N) :-
 %ancho estrictamente mayor que el nivel de arriba.
 % TODO comprobar que es color valido
 esEdificioPiramide([FILA|CONSTRUCCION]) :-
-    contarAncho(FILA,0,N),
+    contarCeldasSinBlanco(FILA,0,N),
     esEdificioPiramideRecursivo(CONSTRUCCION, N).
 
 esEdificioPiramideRecursivo(FILA, N1) :- 
-    contarAncho(FILA,0,N2),
+    contarCeldasSinBlanco(FILA,0,N2),
     menorIgualQue(N1,N2).
 
 esEdificioPiramideRecursivo([FILA|CONSTRUCCION], N1) :-
-    contarAncho(FILA,0,N2),
+    contarCeldasSinBlanco(FILA,0,N2),
     menorIgualQue(N1,N2),
     esEdificioPiramideRecursivo(CONSTRUCCION,N2).
-
-contarAncho([], N1, N2) :- contarAncho([],_,N1), N2. % SUMA
-contarAncho([b|CONSTRUCCION],N, _):-    
-    contarAncho(CONSTRUCCION,N, _).
-contarAncho([_|CONSTRUCCION], N, _):-
-    contarAncho(CONSTRUCCION, s(N), _).
 %%%%%%%%%%%%%%%%%%%%%% FIN ES EDIFICIO PIRAMIDE %%%%%%%%%%%%%%%%%%%%%
