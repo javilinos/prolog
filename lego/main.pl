@@ -159,10 +159,7 @@ contarClavos([_|T],N) :-
 %esEdificioPiramide/1 (esEdificioPiramide(Construccion): predicado que
 %verifica si Construccion es un edificio que cumple que cada nivel tiene
 %ancho estrictamente mayor que el nivel de arriba.
-<<<<<<< HEAD
 % TODO comprobar que es color valido
-=======
->>>>>>> 3f050970ff18efd78e18ed32438d5283d00bd0f6
 esEdificioPiramide([FILA|CONSTRUCCION]) :-
     contarAncho(FILA,0,N),
     esEdificioPiramideRecursivo(CONSTRUCCION, N).
@@ -176,11 +173,7 @@ esEdificioPiramideRecursivo([FILA|CONSTRUCCION], N1) :-
     menorIgualQue(N1,N2),
     esEdificioPiramideRecursivo(CONSTRUCCION,N2).
 
-<<<<<<< HEAD
 contarAncho([], N1, N2) :- contarAncho([],_,N1), N2. % SUMA
-=======
-contarAncho([], N1, N2) :- contarAncho([],_,N1), N2.
->>>>>>> 3f050970ff18efd78e18ed32438d5283d00bd0f6
 contarAncho([b|CONSTRUCCION],N, _):-    
     contarAncho(CONSTRUCCION,N, _).
 contarAncho([_|CONSTRUCCION], N, _):-
